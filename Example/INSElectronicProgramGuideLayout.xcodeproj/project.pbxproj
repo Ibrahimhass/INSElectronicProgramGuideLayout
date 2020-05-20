@@ -21,7 +21,6 @@
 		0639E07019DCA2D2009F1BC8 /* ISHourHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0639E06219DCA2D2009F1BC8 /* ISHourHeader.xib */; };
 		063FB7AE19D9F35E004FA0DC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 063FB7AD19D9F35E004FA0DC /* main.m */; };
 		063FB7B119D9F35E004FA0DC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 063FB7B019D9F35E004FA0DC /* AppDelegate.m */; };
-		063FB7B419D9F35E004FA0DC /* INSFloatingHeadersEPGViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 063FB7B319D9F35E004FA0DC /* INSFloatingHeadersEPGViewController.m */; };
 		063FB7B719D9F35E004FA0DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 063FB7B519D9F35E004FA0DC /* Main.storyboard */; };
 		063FB7B919D9F35E004FA0DC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 063FB7B819D9F35E004FA0DC /* Images.xcassets */; };
 		063FB7BC19D9F35E004FA0DC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 063FB7BA19D9F35E004FA0DC /* LaunchScreen.xib */; };
@@ -37,9 +36,9 @@
 		06A4AF311A4374FD004C8818 /* ISFloatingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06A4AF2F1A4374FD004C8818 /* ISFloatingCell.xib */; };
 		06F96E0119E05E7F0046BBB4 /* ISFloatingCellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F96E0019E05E7F0046BBB4 /* ISFloatingCellOverlay.m */; };
 		85E9D9ABA3B1B54C928BF1B3 /* libPods-INSElectronicProgramGuideLayout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 078BA82E8E29E75CF1857206 /* libPods-INSElectronicProgramGuideLayout.a */; };
-		D2FC139C1A432F9500C45BEA /* INSElectronicProgramGuideLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FC13971A432F9500C45BEA /* INSElectronicProgramGuideLayout.m */; };
 		D2FC139D1A432F9500C45BEA /* INSTimerWeakTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FC13991A432F9500C45BEA /* INSTimerWeakTarget.m */; };
 		D2FC139E1A432F9500C45BEA /* NSDate+INSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FC139B1A432F9500C45BEA /* NSDate+INSUtils.m */; };
+		ED6E65EA2475993E003A83B2 /* INSElectronicProgramGuideLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6E65C5247588B1003A83B2 /* INSElectronicProgramGuideLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +111,9 @@
 		D2FC13991A432F9500C45BEA /* INSTimerWeakTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INSTimerWeakTarget.m; sourceTree = "<group>"; };
 		D2FC139A1A432F9500C45BEA /* NSDate+INSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+INSUtils.h"; sourceTree = "<group>"; };
 		D2FC139B1A432F9500C45BEA /* NSDate+INSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+INSUtils.m"; sourceTree = "<group>"; };
+		ED6E65C4247588B1003A83B2 /* INSElectronicProgramGuideLayout-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "INSElectronicProgramGuideLayout-Bridging-Header.h"; sourceTree = "<group>"; };
+		ED6E65C5247588B1003A83B2 /* INSElectronicProgramGuideLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = INSElectronicProgramGuideLayout.swift; sourceTree = "<group>"; };
+		ED6E65EB2475E104003A83B2 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		F8FC1584BC43B27CD985B344 /* Pods-INSElectronicProgramGuideLayout.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-INSElectronicProgramGuideLayout.release.xcconfig"; path = "Pods/Target Support Files/Pods-INSElectronicProgramGuideLayout/Pods-INSElectronicProgramGuideLayout.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -272,10 +274,13 @@
 			children = (
 				D2FC13961A432F9500C45BEA /* INSElectronicProgramGuideLayout.h */,
 				D2FC13971A432F9500C45BEA /* INSElectronicProgramGuideLayout.m */,
+				ED6E65EB2475E104003A83B2 /* Constants.h */,
+				ED6E65C5247588B1003A83B2 /* INSElectronicProgramGuideLayout.swift */,
 				D2FC13981A432F9500C45BEA /* INSTimerWeakTarget.h */,
 				D2FC13991A432F9500C45BEA /* INSTimerWeakTarget.m */,
 				D2FC139A1A432F9500C45BEA /* NSDate+INSUtils.h */,
 				D2FC139B1A432F9500C45BEA /* NSDate+INSUtils.m */,
+				ED6E65C4247588B1003A83B2 /* INSElectronicProgramGuideLayout-Bridging-Header.h */,
 			);
 			name = INSElectronicProgramGuideLayout;
 			path = ../../INSElectronicProgramGuideLayout;
@@ -333,6 +338,7 @@
 				TargetAttributes = {
 					063FB7A719D9F35E004FA0DC = {
 						CreatedOnToolsVersion = 6.0.1;
+						LastSwiftMigration = 1140;
 					};
 					063FB7C019D9F35E004FA0DC = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -345,6 +351,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -439,7 +446,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0639E06619DCA2D2009F1BC8 /* ISCurrentTimeIndicatorView.m in Sources */,
-				063FB7B419D9F35E004FA0DC /* INSFloatingHeadersEPGViewController.m in Sources */,
 				D2FC139D1A432F9500C45BEA /* INSTimerWeakTarget.m in Sources */,
 				063FB7B119D9F35E004FA0DC /* AppDelegate.m in Sources */,
 				06420EDD19E1A57F00F7969C /* ISHourHeaderBackgroundView.m in Sources */,
@@ -449,7 +455,6 @@
 				0639E06419DCA2D2009F1BC8 /* ISEPGCell.m in Sources */,
 				06A4AF301A4374FD004C8818 /* ISFloatingCell.m in Sources */,
 				063FB7AE19D9F35E004FA0DC /* main.m in Sources */,
-				D2FC139C1A432F9500C45BEA /* INSElectronicProgramGuideLayout.m in Sources */,
 				0639E06C19DCA2D2009F1BC8 /* ISHeaderBackgroundView.m in Sources */,
 				0639E06F19DCA2D2009F1BC8 /* ISHourHeader.m in Sources */,
 				0639E06B19DCA2D2009F1BC8 /* ISHalfHourLineView.m in Sources */,
@@ -457,6 +462,7 @@
 				06F96E0119E05E7F0046BBB4 /* ISFloatingCellOverlay.m in Sources */,
 				06420ED819E141CE00F7969C /* Entry.m in Sources */,
 				0639E06819DCA2D2009F1BC8 /* ISSectionHeader.m in Sources */,
+				ED6E65EA2475993E003A83B2 /* INSElectronicProgramGuideLayout.swift in Sources */,
 				D2FC139E1A432F9500C45BEA /* NSDate+INSUtils.m in Sources */,
 				0639E06319DCA2D2009F1BC8 /* ISCurrentTimeGridlineView.m in Sources */,
 				06420ED519E141CE00F7969C /* Channel.m in Sources */,
@@ -585,12 +591,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = INSElectronicProgramGuideLayout/Prefix.h;
 				INFOPLIST_FILE = INSElectronicProgramGuideLayout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "../INSElectronicProgramGuideLayout/INSElectronicProgramGuideLayout-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -600,18 +610,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = INSElectronicProgramGuideLayout/Prefix.h;
 				INFOPLIST_FILE = INSElectronicProgramGuideLayout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "../INSElectronicProgramGuideLayout/INSElectronicProgramGuideLayout-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
 		063FB7CF19D9F35F004FA0DC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -631,6 +645,7 @@
 		063FB7D019D9F35F004FA0DC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",

@@ -7,7 +7,6 @@
 //
 
 #import "INSFloatingHeadersEPGViewController.h"
-#import "INSElectronicProgramGuideLayout.h"
 #import "ISHourHeader.h"
 #import "ISEPGCell.h"
 #import "ISSectionHeader.h"

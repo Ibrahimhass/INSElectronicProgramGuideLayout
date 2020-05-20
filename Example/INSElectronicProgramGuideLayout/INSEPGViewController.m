@@ -7,7 +7,6 @@
 //
 
 #import "INSEPGViewController.h"
-#import "INSElectronicProgramGuideLayout.h"
 #import "ISHourHeader.h"
 #import "ISEPGCell.h"
 #import "ISSectionHeader.h"
@@ -20,6 +19,7 @@
 #import "Channel.h"
 #import "ISHourHeaderBackgroundView.h"
 #import "Entry.h"
+#import "Constants.h"
 
 @interface INSEPGViewController () <INSElectronicProgramGuideLayoutDataSource, INSElectronicProgramGuideLayoutDelegate, NSFetchedResultsControllerDelegate>
 @property (nonatomic, weak) INSElectronicProgramGuideLayout *collectionViewEPGLayout;
@@ -73,7 +73,7 @@
     [self.collectionViewEPGLayout registerClass:ISHourHeaderBackgroundView.class forDecorationViewOfKind:INSEPGLayoutElementKindHourHeaderBackground];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.collectionViewEPGLayout scrollToCurrentTimeAnimated:YES];
+        [self.collectionViewEPGLayout scrollToCurrentTimeWithAnimated:YES];
     });
 }
 
@@ -105,11 +105,11 @@
         view = dayColumnHeader;
     } else if (kind == INSEPGLayoutElementKindHourHeader) {
         ISHourHeader *timeRowHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass([ISHourHeader class]) forIndexPath:indexPath];
-        timeRowHeader.time = [self.collectionViewEPGLayout dateForHourHeaderAtIndexPath:indexPath];
+        timeRowHeader.time = [self.collectionViewEPGLayout dateForHourHeaderAt:indexPath];
         view = timeRowHeader;
     } else if (kind == INSEPGLayoutElementKindHalfHourHeader) {
         ISHourHeader *timeRowHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass([ISHourHeader class]) forIndexPath:indexPath];
-        timeRowHeader.time = [self.collectionViewEPGLayout dateForHalfHourHeaderAtIndexPath:indexPath];
+        timeRowHeader.time = [self.collectionViewEPGLayout dateForHalfHourHeaderAt:indexPath];
         view = timeRowHeader;
     } 
 

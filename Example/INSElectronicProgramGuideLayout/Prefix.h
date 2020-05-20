@@ -10,4 +10,6 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <MagicalRecord/MagicalRecord.h>
+#import "INSElectronicProgramGuideLayout-Swift.h"
+
 #endif
