@@ -39,6 +39,8 @@
 		D2FC139D1A432F9500C45BEA /* INSTimerWeakTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FC13991A432F9500C45BEA /* INSTimerWeakTarget.m */; };
 		D2FC139E1A432F9500C45BEA /* NSDate+INSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = D2FC139B1A432F9500C45BEA /* NSDate+INSUtils.m */; };
 		ED6E65EA2475993E003A83B2 /* INSElectronicProgramGuideLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6E65C5247588B1003A83B2 /* INSElectronicProgramGuideLayout.swift */; };
+		ED6E65F02475E3B8003A83B2 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6E65EF2475E3B8003A83B2 /* Constants.m */; };
+		ED6E65F12475E4FB003A83B2 /* INSFloatingHeadersEPGViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 063FB7B319D9F35E004FA0DC /* INSFloatingHeadersEPGViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,7 +115,8 @@
 		D2FC139B1A432F9500C45BEA /* NSDate+INSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+INSUtils.m"; sourceTree = "<group>"; };
 		ED6E65C4247588B1003A83B2 /* INSElectronicProgramGuideLayout-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "INSElectronicProgramGuideLayout-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED6E65C5247588B1003A83B2 /* INSElectronicProgramGuideLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = INSElectronicProgramGuideLayout.swift; sourceTree = "<group>"; };
-		ED6E65EB2475E104003A83B2 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		ED6E65EE2475E3B7003A83B2 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		ED6E65EF2475E3B8003A83B2 /* Constants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		F8FC1584BC43B27CD985B344 /* Pods-INSElectronicProgramGuideLayout.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-INSElectronicProgramGuideLayout.release.xcconfig"; path = "Pods/Target Support Files/Pods-INSElectronicProgramGuideLayout/Pods-INSElectronicProgramGuideLayout.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -274,7 +277,8 @@
 			children = (
 				D2FC13961A432F9500C45BEA /* INSElectronicProgramGuideLayout.h */,
 				D2FC13971A432F9500C45BEA /* INSElectronicProgramGuideLayout.m */,
-				ED6E65EB2475E104003A83B2 /* Constants.h */,
+				ED6E65EE2475E3B7003A83B2 /* Constants.h */,
+				ED6E65EF2475E3B8003A83B2 /* Constants.m */,
 				ED6E65C5247588B1003A83B2 /* INSElectronicProgramGuideLayout.swift */,
 				D2FC13981A432F9500C45BEA /* INSTimerWeakTarget.h */,
 				D2FC13991A432F9500C45BEA /* INSTimerWeakTarget.m */,
@@ -297,8 +301,6 @@
 				063FB7A419D9F35E004FA0DC /* Sources */,
 				063FB7A519D9F35E004FA0DC /* Frameworks */,
 				063FB7A619D9F35E004FA0DC /* Resources */,
-				2482F9C9DB1CB95FD5C0CB60 /* [CP] Embed Pods Frameworks */,
-				777272D808EE017D039E903A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -393,49 +395,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2482F9C9DB1CB95FD5C0CB60 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-INSElectronicProgramGuideLayout/Pods-INSElectronicProgramGuideLayout-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		777272D808EE017D039E903A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-INSElectronicProgramGuideLayout/Pods-INSElectronicProgramGuideLayout-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		934E8D74F0D09ABD13CE50E6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-INSElectronicProgramGuideLayout-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -453,9 +428,11 @@
 				06A4AF2C1A437353004C8818 /* INSEPGViewController.m in Sources */,
 				064C31FA19E0511D0002E545 /* ISDashedLineView.m in Sources */,
 				0639E06419DCA2D2009F1BC8 /* ISEPGCell.m in Sources */,
+				ED6E65F12475E4FB003A83B2 /* INSFloatingHeadersEPGViewController.m in Sources */,
 				06A4AF301A4374FD004C8818 /* ISFloatingCell.m in Sources */,
 				063FB7AE19D9F35E004FA0DC /* main.m in Sources */,
 				0639E06C19DCA2D2009F1BC8 /* ISHeaderBackgroundView.m in Sources */,
+				ED6E65F02475E3B8003A83B2 /* Constants.m in Sources */,
 				0639E06F19DCA2D2009F1BC8 /* ISHourHeader.m in Sources */,
 				0639E06B19DCA2D2009F1BC8 /* ISHalfHourLineView.m in Sources */,
 				0639E06A19DCA2D2009F1BC8 /* ISGridlineView.m in Sources */,
@@ -597,7 +574,8 @@
 				INFOPLIST_FILE = INSElectronicProgramGuideLayout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.inspace.INSElectronicProgramGuideLayout;
+				PRODUCT_NAME = INSElectronicProgramGuideLayout;
 				SWIFT_OBJC_BRIDGING_HEADER = "../INSElectronicProgramGuideLayout/INSElectronicProgramGuideLayout-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -616,7 +594,8 @@
 				INFOPLIST_FILE = INSElectronicProgramGuideLayout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.inspace.INSElectronicProgramGuideLayout;
+				PRODUCT_NAME = INSElectronicProgramGuideLayout;
 				SWIFT_OBJC_BRIDGING_HEADER = "../INSElectronicProgramGuideLayout/INSElectronicProgramGuideLayout-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};

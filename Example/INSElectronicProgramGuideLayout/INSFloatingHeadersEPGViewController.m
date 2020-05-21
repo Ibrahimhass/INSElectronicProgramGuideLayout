@@ -19,6 +19,7 @@
 #import "Channel.h"
 #import "ISHourHeaderBackgroundView.h"
 #import "Entry.h"
+#import "Constants.h"
 
 @interface INSFloatingHeadersEPGViewController () <INSElectronicProgramGuideLayoutDataSource, INSElectronicProgramGuideLayoutDelegate, NSFetchedResultsControllerDelegate>
 @property (nonatomic, weak) INSElectronicProgramGuideLayout *collectionViewEPGLayout;
@@ -39,14 +40,14 @@
     UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
     backgroundImage.image = [UIImage imageNamed:@"backgroundImage"];
     self.collectionView.backgroundView = backgroundImage;
-
+    
     self.fetchedResultsController = [Entry MR_fetchAllGroupedBy:@"channel.iD" withPredicate:nil sortedBy:@"channel.iD,channel.name" ascending:YES delegate:self];
-
+    
     self.view.backgroundColor = [UIColor whiteColor];
     // Do any additional setup after loading the view, typically from a nib.
     self.collectionViewEPGLayout.dataSource = self;
     self.collectionViewEPGLayout.delegate = self;
-
+    
     self.collectionViewEPGLayout.shouldResizeStickyHeaders = NO;
     self.collectionViewEPGLayout.shouldUseFloatingItemOverlay = YES;
     self.collectionViewEPGLayout.floatingItemOffsetFromSection = 10.0;
@@ -54,48 +55,45 @@
     self.collectionViewEPGLayout.sectionHeight = 60;
     self.collectionViewEPGLayout.sectionHeaderWidth = 110;
     
-//    self.collectionView.contentInset = UIEdgeInsetsMake(0, -1500, 0, -1500);
-
+    //    self.collectionView.contentInset = UIEdgeInsetsMake(0, -1500, 0, -1500);
+    
     NSString *timeRowHeaderStringClass = NSStringFromClass([ISHourHeader class]);
     [self.collectionView registerNib:[UINib nibWithNibName:timeRowHeaderStringClass bundle:nil] forSupplementaryViewOfKind:INSEPGLayoutElementKindHourHeader withReuseIdentifier:timeRowHeaderStringClass];
     [self.collectionView registerNib:[UINib nibWithNibName:timeRowHeaderStringClass bundle:nil] forSupplementaryViewOfKind:INSEPGLayoutElementKindHalfHourHeader withReuseIdentifier:timeRowHeaderStringClass];
-
+    
     NSString *cellStringClass = NSStringFromClass([ISEPGCell class]);
     [self.collectionView registerNib:[UINib nibWithNibName:cellStringClass bundle:nil] forCellWithReuseIdentifier:cellStringClass];
-
+    
     NSString *dayColumnHeaderStringClass = NSStringFromClass([ISSectionHeader class]);
     [self.collectionView registerNib:[UINib nibWithNibName:dayColumnHeaderStringClass bundle:nil] forSupplementaryViewOfKind:INSEPGLayoutElementKindSectionHeader withReuseIdentifier:dayColumnHeaderStringClass];
-
+    
     // Required when self.collectionViewEPGLayout.shouldUseFloatingItemOverlay set to YES;
     [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([ISFloatingCellOverlay class]) bundle:nil] forSupplementaryViewOfKind:INSEPGLayoutElementKindFloatingItemOverlay withReuseIdentifier:NSStringFromClass([ISFloatingCellOverlay class])];
-
+    
     // Optional
     [self.collectionViewEPGLayout registerClass:ISCurrentTimeGridlineView.class forDecorationViewOfKind:INSEPGLayoutElementKindCurrentTimeIndicatorVerticalGridline];
     [self.collectionViewEPGLayout registerClass:ISGridlineView.class forDecorationViewOfKind:INSEPGLayoutElementKindVerticalGridline];
     [self.collectionViewEPGLayout registerClass:ISHalfHourLineView.class forDecorationViewOfKind:INSEPGLayoutElementKindHalfHourVerticalGridline];
-
+    
     [self.collectionViewEPGLayout registerClass:ISHeaderBackgroundView.class forDecorationViewOfKind:INSEPGLayoutElementKindSectionHeaderBackground];
     [self.collectionViewEPGLayout registerClass:ISHourHeaderBackgroundView.class forDecorationViewOfKind:INSEPGLayoutElementKindHourHeaderBackground];
-
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.collectionViewEPGLayout scrollToCurrentTimeAnimated:YES];
+        [self.collectionViewEPGLayout scrollToCurrentTimeWithAnimated:YES];
     });
 }
 
-- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout startTimeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout startTimeForItemAt:(NSIndexPath *)indexPath {
     Entry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
     return entry.startDate;
 }
 
-- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout endTimeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout endTimeForItemAt:(NSIndexPath *)indexPath {
     Entry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
     return entry.endDate;
 }
 
-- (NSDate *)currentTimeForCollectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)collectionViewLayout
-{
+- (NSDate *)currentTimeFor:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)collectionViewLayout {
     return [NSDate date];
 }
 
@@ -105,16 +103,16 @@
     if (kind == INSEPGLayoutElementKindSectionHeader) {
         ISSectionHeader *dayColumnHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass([ISSectionHeader class]) forIndexPath:indexPath];
         Entry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
+        
         dayColumnHeader.dayLabel.text = entry.channel.name;
         view = dayColumnHeader;
     } else if (kind == INSEPGLayoutElementKindHourHeader) {
         ISHourHeader *timeRowHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass([ISHourHeader class]) forIndexPath:indexPath];
-        timeRowHeader.time = [self.collectionViewEPGLayout dateForHourHeaderAtIndexPath:indexPath];
+        timeRowHeader.time = [self.collectionViewEPGLayout dateForHourHeaderAt:indexPath];
         view = timeRowHeader;
     } else if (kind == INSEPGLayoutElementKindHalfHourHeader) {
         ISHourHeader *timeRowHeader = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass([ISHourHeader class]) forIndexPath:indexPath];
-        timeRowHeader.time = [self.collectionViewEPGLayout dateForHalfHourHeaderAtIndexPath:indexPath];
+        timeRowHeader.time = [self.collectionViewEPGLayout dateForHalfHourHeaderAt:indexPath];
         view = timeRowHeader;
     } else if (kind == INSEPGLayoutElementKindFloatingItemOverlay) {
         ISFloatingCellOverlay *overlay = [collectionView dequeueReusableSupplementaryViewOfKind:INSEPGLayoutElementKindFloatingItemOverlay withReuseIdentifier:NSStringFromClass([ISFloatingCellOverlay class]) forIndexPath:indexPath];
@@ -127,12 +125,12 @@
     return view;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout sizeForFloatingItemOverlayAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout sizeForFloatingItemOverlayAt:(NSIndexPath *)indexPath {
     Entry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
+    
     return CGSizeMake([entry.title sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17.0]}].width + 20, electronicProgramGuideLayout.sectionHeight);
 }
+
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {

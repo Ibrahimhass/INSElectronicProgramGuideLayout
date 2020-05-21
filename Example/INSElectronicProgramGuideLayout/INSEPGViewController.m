@@ -77,20 +77,17 @@
     });
 }
 
-- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout startTimeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout startTimeForItemAt:(NSIndexPath *)indexPath {
     Entry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
     return entry.startDate;
 }
 
-- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout endTimeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout endTimeForItemAt:(NSIndexPath *)indexPath {
     Entry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
     return entry.endDate;
 }
 
-- (NSDate *)currentTimeForCollectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)collectionViewLayout
-{
+- (NSDate *)currentTimeFor:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)collectionViewLayout {
     return [NSDate date];
 }
 
@@ -126,8 +123,7 @@
     return [[[self.fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ISFloatingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([ISFloatingCell class]) forIndexPath:indexPath];
     Entry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.titleLabel.text = entry.title;
@@ -136,14 +132,23 @@
     return cell;
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
+//- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    ISFloatingCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([ISFloatingCell class]) forIndexPath:indexPath];
+//    Entry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    cell.titleLabel.text = entry.title;
+//    [cell setDate:entry.startDate];
+//
+//    return cell;
+//
+//}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.collectionViewEPGLayout invalidateLayoutCache];
     [self.collectionView reloadData];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 @end

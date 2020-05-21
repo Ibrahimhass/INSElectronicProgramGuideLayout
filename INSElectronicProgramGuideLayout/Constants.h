@@ -6,8 +6,7 @@
 //  Copyright © 2020 inspace.io. All rights reserved.
 //
 
-#ifndef Constants_h
-#define Constants_h
+#import <UIKit/UIKit.h>
 
 extern NSString *const INSEPGLayoutElementKindSectionHeader;
 extern NSString *const INSEPGLayoutElementKindHourHeader;
@@ -30,4 +29,10 @@ extern NSUInteger const INSEPGLayoutMinCellZ;
 extern NSUInteger const INSEPGLayoutMinBackgroundZ;
 
 
-#endif /* Constants_h */
+NS_ASSUME_NONNULL_BEGIN
+
+@interface Constants : NSObject
+
+@end
+
+NS_ASSUME_NONNULL_END

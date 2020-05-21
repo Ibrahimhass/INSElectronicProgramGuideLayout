@@ -35,7 +35,7 @@ enum INSElectronicProgramGuideLayoutType : Int {
     func collectionView(_ collectionView: UICollectionView?, layout electronicProgramGuideLayout: INSElectronicProgramGuideLayout?, startTimeForItemAt indexPath: IndexPath?) -> Date?
     func collectionView(_ collectionView: UICollectionView?, layout electronicProgramGuideLayout: INSElectronicProgramGuideLayout?, endTimeForItemAt indexPath: IndexPath?) -> Date?
     func currentTime(for collectionView: UICollectionView?, layout collectionViewLayout: INSElectronicProgramGuideLayout?) -> Date?
-    
+
     ///  By Default start and end date is calculated using collectionView:layout:startTimeForItemAtIndexPath: and collectionView:layout:endTimeForItemAtIndexPath:,
     ///  if you want to force layout timeline use these delegate methods.
     @objc optional func collectionView(_ collectionView: UICollectionView?, startTimeFor electronicProgramGuideLayout: INSElectronicProgramGuideLayout?) -> Date?
@@ -45,22 +45,6 @@ enum INSElectronicProgramGuideLayoutType : Int {
 @objc protocol INSElectronicProgramGuideLayoutDelegate: UICollectionViewDelegate {
     @objc optional func collectionView(_ collectionView: UICollectionView?, layout electronicProgramGuideLayout: INSElectronicProgramGuideLayout?, sizeForFloatingItemOverlayAt indexPath: IndexPath?) -> CGSize
 }
-
-
-//let INSEPGLayoutElementKindSectionHeader = "INSEPGLayoutElementKindSectionHeader"
-//let INSEPGLayoutElementKindHourHeader = "INSEPGLayoutElementKindHourHeader"
-//let INSEPGLayoutElementKindHalfHourHeader = "INSEPGLayoutElementKindHalfHourHeader"
-//let INSEPGLayoutElementKindSectionHeaderBackground = "INSEPGLayoutElementKindSectionHeaderBackground"
-//let INSEPGLayoutElementKindHourHeaderBackground = "INSEPGLayoutElementKindHourHeaderBackground"
-//let INSEPGLayoutElementKindCurrentTimeIndicator = "INSEPGLayoutElementKindCurrentTimeIndicator"
-//let INSEPGLayoutElementKindCurrentTimeIndicatorVerticalGridline = "INSEPGLayoutElementKindCurrentTimeIndicatorVerticalGridline"
-//let INSEPGLayoutElementKindVerticalGridline = "INSEPGLayoutElementKindVerticalGridline"
-//let INSEPGLayoutElementKindHalfHourVerticalGridline = "INSEPGLayoutElementKindHalfHourVerticalGridline"
-//let INSEPGLayoutElementKindHorizontalGridline = "INSEPGLayoutElementKindHorizontalGridline"
-//let INSEPGLayoutElementKindFloatingItemOverlay = "INSEPGLayoutElementKindFloatingItemOverlay"
-//let INSEPGLayoutMinOverlayZ = Int(1000.0) // Allows for 900 items in a section without z overlap issues
-//let INSEPGLayoutMinCellZ = Int(100.0) // Allows for 100 items in a section's background
-//let INSEPGLayoutMinBackgroundZ = Int(0.0)
 
 @objcMembers
 class INSElectronicProgramGuideLayout: UICollectionViewLayout {
@@ -100,28 +84,53 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     private weak var _dataSource: INSElectronicProgramGuideLayoutDataSource?
     weak var dataSource: INSElectronicProgramGuideLayoutDataSource? {
         get {
-            return (collectionView?.dataSource as? INSElectronicProgramGuideLayoutDataSource)
+            return _dataSource
         }
         set(dataSource) {
-            collectionView?.dataSource = dataSource
+            _dataSource = dataSource
+            collectionView?.dataSource = (dataSource as? UICollectionViewDataSource)
         }
     }
     
     private weak var _delegate: INSElectronicProgramGuideLayoutDelegate?
     weak var delegate: INSElectronicProgramGuideLayoutDelegate? {
         get {
-            return collectionView?.delegate as? INSElectronicProgramGuideLayoutDelegate
+            return _delegate
         }
         set(delegate) {
+            _delegate = delegate
             collectionView?.delegate = delegate
         }
     }
     
     ///  Returns the x-axis position on collection view content view for date.
     func xCoordinate(for date: NSDate?) -> CGFloat {
-        let timeDiff = Float(latestDate()?.timeIntervalSince1970 ?? 0.0 - (date?.timeIntervalSince1970 ?? 0.0))
-        return  CGFloat(nearbyintf(Float(collectionViewContentSize.width - (CGFloat((abs(timeDiff)) / 60) * minuteWidth) - contentMargin.right))
-        )
+        print (collectionViewContentSize.width) // 44346.5
+        let td = abs(CGFloat((latestDate()?.timeIntervalSince1970 ?? 0.0) - (date?.timeIntervalSince1970 ?? 0.0)) / 60.0) // 267468.1734828949
+        print (td)
+//        return  CGFloat(nearbyintf(Float(collectionViewContentSize.width - (CGFloat((abs(timeDiff)) / Float(60) * Float(minuteWidth))) - contentMargin.right))
+//        )
+        //41139.000000
+        /*
+         2020-05-21 17:20:06.199087+0530 INSElectronicProgramGuideLayout[3508:93285] 41139.000000
+         (lldb) po ((fabs([self latestDate].timeIntervalSince1970 - date.timeIntervalSince1970)) / 60 * self.minuteWidth)
+         3207.6666666666665
+
+         (lldb) po self.minuteWidth
+         10
+
+         (lldb) po self.contentMargin.right
+         0
+
+         (lldb) po self.collectionViewContentSize.width
+         44346.5
+
+         (lldb) po 44346.5 - 3207.6666666666665 - 0
+         41138.833333333336
+         */
+        
+//        print (collectionViewContentSize.width - (td * minuteWidth) - contentMargin.right)
+        return collectionViewContentSize.width - (td * minuteWidth) - contentMargin.right
     }
     
     /// Returns date for x-axis position on collection view content view.
@@ -153,6 +162,7 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     ///  Scrolling to current time on timeline
     func scrollToCurrentTime(animated: Bool) {
         if (collectionView?.numberOfSections ?? 0) > 0 {
+            print ((currentTimeVerticalGridlineAttributes?[IndexPath(item: 0, section: 0)] as AnyObject))
             let currentTimeHorizontalGridlineattributesFrame = ((currentTimeVerticalGridlineAttributes?[IndexPath(item: 0, section: 0)] as AnyObject).value(forKey: "frame") as? CGRect) ?? .zero
             var xOffset: CGFloat
             if !currentTimeHorizontalGridlineattributesFrame.equalTo(CGRect.zero) {
@@ -311,7 +321,6 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
         floatingItemOverlaySize = CGSize(width: 0, height: sectionHeight)
         floatingItemOffsetFromSection = 10.0
         shouldResizeStickyHeaders = false
-        
         // Set CurrentTime Behind cell
         currentTimeIndicatorShouldBeBehind = true
         
@@ -351,22 +360,16 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     
     func layoutAttributesForDecorationView(at indexPath: IndexPath?, ofKind kind: String?, withItemCache itemCache: inout [AnyHashable : Any]) -> UICollectionViewLayoutAttributes? {
         let indexPathKey = key(for: indexPath)
-        var layoutAttributes: UICollectionViewLayoutAttributes?
+        var _layoutAttributes: UICollectionViewLayoutAttributes? = itemCache[indexPathKey] as? UICollectionViewLayoutAttributes
         if let indexPathKey = indexPathKey {
-            if let kind = kind {
-                if let _ = registeredDecorationClasses?[kind] {
-                    if (itemCache[indexPathKey] as? UICollectionViewLayoutAttributes) == nil {
-                        layoutAttributes = UICollectionViewLayoutAttributes.init(forDecorationViewOfKind: kind, with: indexPathKey)
-                        itemCache[indexPathKey] = layoutAttributes
-                    } else {
-                        if let attr = itemCache[indexPathKey] as? UICollectionViewLayoutAttributes {
-                            layoutAttributes = attr
-                        }
-                    }
+            if registeredDecorationClasses?[kind ?? ""] != nil && _layoutAttributes == nil {
+                _layoutAttributes = UICollectionViewLayoutAttributes(forDecorationViewOfKind: kind ?? "", with: indexPathKey)
+                if let layoutAttributes = _layoutAttributes {
+                    itemCache[indexPathKey] = layoutAttributes
                 }
             }
         }
-        return layoutAttributes
+        return _layoutAttributes
     }
     
     func layoutAttributesForSupplementaryView(at indexPath: IndexPath?, ofKind kind: String?, withItemCache itemCache: inout [AnyHashable : Any]) -> UICollectionViewLayoutAttributes? {
@@ -491,7 +494,11 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
             return cachedMaxSectionWidth
         }
         
-        let maxSectionWidth: CGFloat = sectionHeaderWidth + CGFloat((latestDate()?.timeIntervalSince1970 ?? 0.0) - (earliestDate()?.timeIntervalSince1970 ?? 0.0)) / 60.0 * minuteWidth + contentMargin.left + contentMargin.right
+        //    CGFloat maxSectionWidth = self.sectionHeaderWidth + ([self latestDate].timeIntervalSince1970 - [self earliestDate].timeIntervalSince1970) / 60.0 * self.minuteWidth + self.contentMargin.left + self.contentMargin.right;
+
+        //sectionHeaderWidth 110
+        
+        let maxSectionWidth: CGFloat = sectionHeaderWidth + (CGFloat((latestDate()?.timeIntervalSince1970 ?? 0.0) - (earliestDate()?.timeIntervalSince1970 ?? 0.0)) / 60.0) * minuteWidth + contentMargin.left + contentMargin.right
         
         cachedMaxSectionWidth = maxSectionWidth
         
@@ -512,19 +519,26 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
             return
         }
         
-        let needsToPopulateItemAttributes = itemAttributes?.count == 0
-        let needsToPopulateHorizontalGridlineAttributes = horizontalGridlineAttributes?.count == 0
+        let needsToPopulateItemAttributes = (itemAttributes?.count ?? 0) == 0
+        let needsToPopulateHorizontalGridlineAttributes = (horizontalGridlineAttributes?.count ?? 0) == 0
         
         prepareSectionHeaderBackgroundAttributes()
         prepareHourHeaderBackgroundAttributes()
-        
+
         prepareCurrentIndicatorAttributes()
-        
+
         prepareVerticalGridlineAttributes()
         
+//        for section in sectionIndexes ?? NSIndexSet.init() {
+//            self.prepareSectionAttributes(section, needsToPopulateItemAttributes: needsToPopulateItemAttributes)
+//            if needsToPopulateHorizontalGridlineAttributes {
+//                self.prepareHorizontalGridlineAttributes(forSection: section)
+//            }
+//        }
+//
         sectionIndexes?.enumerate({ section, stop in
             self.prepareSectionAttributes(section, needsToPopulateItemAttributes: needsToPopulateItemAttributes)
-            
+
             if needsToPopulateHorizontalGridlineAttributes {
                 self.prepareHorizontalGridlineAttributes(forSection: section)
             }
@@ -541,7 +555,7 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
             
             let itemEndTime = endDate(for: floatingItemIndexPath)
             
-            if (itemEndTime as NSDate?)?.ins_isLaterThan(latestDate()) != nil || (itemEndTime as NSDate?)?.ins_isEarlierThan(earliestDate()) != nil {
+            if (itemEndTime as NSDate?)?.ins_isLaterThan(latestDate()) != false || (itemEndTime as NSDate?)?.ins_isEarlierThan(earliestDate()) != false {
                 continue
             }
             
@@ -577,12 +591,12 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     }
     
     func prepareItemAttributes(forSection section: Int, sectionFrame rect: CGRect) {
-        for item in 0..<(collectionView?.numberOfItems(inSection: section) ?? 0) {
+        for item in 0 ..< (collectionView?.numberOfItems(inSection: section) ?? 0) {
             let itemIndexPath = IndexPath(item: item, section: section)
             
             let itemEndTime = endDate(for: itemIndexPath)
             
-            if (itemEndTime as NSDate?)?.ins_isLaterThan(latestDate()) != nil || (itemEndTime as NSDate?)?.ins_isEarlierThan(earliestDate()) != nil {
+            if (itemEndTime as NSDate?)?.ins_isLaterThan(latestDate()) != false || (itemEndTime as NSDate?)?.ins_isEarlierThan(earliestDate()) != false {
                 continue
             }
             
@@ -645,7 +659,7 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     
     func prepareVerticalGridlineAttributes() {
         let gridMinX = minimumGridX()
-        let gridMaxWidth = maximumSectionWidth() - gridMinX
+        var gridMaxWidth = maximumSectionWidth() - gridMinX
         let hourWidth = self.hourWidth
         
         let hourMinY = shouldResizeStickyHeaders ? CGFloat(fmaxf(Float((collectionView?.contentOffset.y ?? 0.0) + (collectionView?.contentInset.top ?? 0.0)), 0.0)) : (collectionView?.contentOffset.y ?? 0.0) + (collectionView?.contentInset.top ?? 0.0)
@@ -720,15 +734,15 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     }
     
     func prepareCurrentIndicatorAttributes() {
+        print ("prepareCurrentIndicatorAttributes()")
         let currentTimeIndicatorIndexPath = IndexPath(row: 0, section: 0)
         var currentTimeIndicatorAttributes: UICollectionViewLayoutAttributes? = nil
         currentTimeIndicatorAttributes = layoutAttributesForDecorationView(at: currentTimeIndicatorIndexPath, ofKind: INSEPGLayoutElementKindCurrentTimeIndicator, withItemCache: &(self.currentTimeIndicatorAttributes)!)
         
-        let currentTimeHorizontalGridlineIndexPath = IndexPath(row: 0, section: 0)
-        let currentTimeHorizontalGridlineAttributes = layoutAttributesForDecorationView(at: currentTimeHorizontalGridlineIndexPath, ofKind: INSEPGLayoutElementKindCurrentTimeIndicatorVerticalGridline, withItemCache: &(currentTimeVerticalGridlineAttributes)!)
+        let currentTimeHorizontalGridlineAttributes = layoutAttributesForDecorationView(at: currentTimeIndicatorIndexPath, ofKind: INSEPGLayoutElementKindCurrentTimeIndicatorVerticalGridline, withItemCache: &(currentTimeVerticalGridlineAttributes)!)
         
         let currentDate = self.currentDate()
-        let currentTimeIndicatorVisible = currentDate?.ins_isLaterThanOrEqual(to: earliestDate()) != nil && currentDate?.ins_isEarlierThan(latestDate()) != nil
+        let currentTimeIndicatorVisible = currentDate?.ins_isLaterThanOrEqual(to: earliestDate()) != false && currentDate?.ins_isEarlierThan(latestDate()) != false
         currentTimeIndicatorAttributes?.isHidden = !currentTimeIndicatorVisible
         currentTimeHorizontalGridlineAttributes?.isHidden = !currentTimeIndicatorVisible
         
@@ -779,15 +793,11 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
         let hourHeaderBackgroundIndexPath = IndexPath(row: 0, section: 0)
         var hourHeaderBackgroundAttributes: UICollectionViewLayoutAttributes? = nil
         hourHeaderBackgroundAttributes = layoutAttributesForDecorationView(at: hourHeaderBackgroundIndexPath, ofKind: INSEPGLayoutElementKindHourHeaderBackground, withItemCache: &(self.hourHeaderBackgroundAttributes)!)
-        // Frame
         var hourHeaderBackgroundHeight = (hourHeaderHeight + CGFloat((((collectionView?.contentOffset.y ?? 0.0) < 0.0) ? abs(Float(collectionView?.contentOffset.y ?? 0.0)) : 0.0))) - (collectionView?.contentInset.top ?? 0.0)
-        
         if !shouldResizeStickyHeaders || hourHeaderHeight >= hourHeaderBackgroundHeight {
             hourHeaderBackgroundHeight = hourHeaderHeight
         }
-        
-        hourHeaderBackgroundAttributes?.frame = CGRect.init(x: collectionView?.contentOffset.x ?? 0.0, y: (collectionView?.contentOffset.y ?? 0.0) + (collectionView?.contentInset.top ?? 0.0), width: collectionView?.frame.size.width ?? 0.0, height: collectionView?.frame.size.height ?? 0.0)
-        
+        hourHeaderBackgroundAttributes?.frame = CGRect.init(x: collectionView?.contentOffset.x ?? 0.0, y: (collectionView?.contentOffset.y ?? 0.0) + (collectionView?.contentInset.top ?? 0.0), width: collectionView?.frame.size.width ?? 0.0, height: hourHeaderBackgroundHeight)
         hourHeaderBackgroundAttributes?.isHidden = false
         hourHeaderBackgroundAttributes?.zIndex = Int(zIndex(forElementKind: INSEPGLayoutElementKindHourHeaderBackground, floating: true))
     }
@@ -874,6 +884,7 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var visibleSections = NSMutableIndexSet()
+        
         (NSIndexSet(indexesIn: NSRange(location: 0, length: collectionView?.numberOfSections ?? 0))).enumerate({ section, stop in
             let sectionRect = self.rect(forSection: section)
             if sectionRect.intersects(rect) {
@@ -885,8 +896,8 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
         prepareSectionLayout(forSections: visibleSections)
         // Return the visible attributes (rect intersection)
         return (allAttributes as NSArray?)?.filtered(using: NSPredicate(block: { layoutAttributes, bindings in
-            return ((layoutAttributes as AnyObject?)?.value?(forKey: "frame") as? CGRect)?.intersects(rect) ?? false
-            //layoutAttributes?.frame.intersects(rect) ?? false
+            return ((layoutAttributes as AnyObject?)?.value?(forKey: "frame") as? CGRect)?.intersects(rect) != false
+            //layoutAttributes?.frame.intersects(rect) != false
         })) as? [UICollectionViewLayoutAttributes]
     }
     
@@ -898,7 +909,6 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     override var collectionViewContentSize: CGSize {
         let width = maximumSectionWidth()
         let height = hourHeaderHeight + CGFloat((sectionHeight + sectionGap) * CGFloat(collectionView?.numberOfSections ?? 0)) + contentMargin.top + contentMargin.bottom - sectionGap
-        
         return CGSize(width: width >= (collectionView?.frame.size.width ?? 0.0) ? width : collectionView?.frame.size.width ?? 0.0, height: height >= (collectionView?.frame.size.height ?? 0.0) ? height : collectionView?.frame.size.height ?? 0.0)
     }
     
@@ -916,28 +926,63 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     
     func zIndex(forElementKind elementKind: String?, floating: Bool) -> CGFloat {
         if elementKind == INSEPGLayoutElementKindCurrentTimeIndicator {
+            print ("elementKind == INSEPGLayoutElementKindCurrentTimeIndicator")
+            print (CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 9.0 : 4.0) : (floating ? 7.0 : 2.0)))
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 9.0 : 4.0) : (floating ? 7.0 : 2.0))
         } else if elementKind == INSEPGLayoutElementKindHourHeader || elementKind == INSEPGLayoutElementKindHalfHourHeader {
+            print ("elementKind == INSEPGLayoutElementKindHourHeader || elementKind == INSEPGLayoutElementKindHalfHourHeader")
+            print (CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 8.0 : 3.0) : (floating ? 6.0 : 1.0)))
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 8.0 : 3.0) : (floating ? 6.0 : 1.0))
         } else if elementKind == INSEPGLayoutElementKindHourHeaderBackground {
+            print ("elementKind == INSEPGLayoutElementKindHourHeaderBackground")
+            print (CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 7.0 : 2.0) : (floating ? 5.0 : 0.0)))
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 7.0 : 2.0) : (floating ? 5.0 : 0.0))
         } else if elementKind == INSEPGLayoutElementKindSectionHeader {
+            print ("elementKind == INSEPGLayoutElementKindSectionHeader")
+            print (CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 6.0 : 1.0) : (floating ? 9.0 : 4.0)))
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 6.0 : 1.0) : (floating ? 9.0 : 4.0))
         } else if elementKind == INSEPGLayoutElementKindSectionHeaderBackground {
+            print ("elementKind == INSEPGLayoutElementKindSectionHeaderBackground")
+            print (CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 5.0 : 0.0) : (floating ? 8.0 : 3.0)))
+            print ("=============================")
+            // 1005.0
             return CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 5.0 : 0.0) : (floating ? 8.0 : 3.0))
         } else if elementKind == nil {
+            print ("elementKind == nil")
+            print (INSEPGLayoutMinCellZ)
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinCellZ)
         } else if elementKind == INSEPGLayoutElementKindFloatingItemOverlay {
+            // 101.5
+            print ("elementKind == INSEPGLayoutElementKindFloatingItemOverlay")
+            print (CGFloat(INSEPGLayoutMinCellZ) + 1.0)
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinCellZ) + 1.0
         } else if elementKind == INSEPGLayoutElementKindCurrentTimeIndicatorVerticalGridline {
             if currentTimeIndicatorShouldBeBehind {
+                print ("elementKind == INSEPGLayoutElementKindCurrentTimeIndicatorVerticalGridline")
+                print (CGFloat(INSEPGLayoutMinBackgroundZ) + 2.0)
+                print ("=============================")
                 return CGFloat(INSEPGLayoutMinBackgroundZ) + 2.0
             }
             // Place currentTimeGridLine juste behind Section Header and above cell
+            print ("Place currentTimeGridLine juste behind Section Header and above cell")
+            CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 5.9 : 0.9) : (floating ? 8.9 : 3.9))
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinOverlayZ) + ((headerLayoutType == .timeRowAboveDayColumn) ? (floating ? 5.9 : 0.9) : (floating ? 8.9 : 3.9))
         } else if elementKind == INSEPGLayoutElementKindVerticalGridline || elementKind == INSEPGLayoutElementKindHalfHourVerticalGridline {
+            print ("elementKind == INSEPGLayoutElementKindVerticalGridline || elementKind == INSEPGLayoutElementKindHalfHourVerticalGridline")
+            print (CGFloat(INSEPGLayoutMinBackgroundZ) + 1.0)
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinBackgroundZ) + 1.0
         } else if elementKind == INSEPGLayoutElementKindHorizontalGridline {
+            print ("elementKind == INSEPGLayoutElementKindHorizontalGridline")
+            print (CGFloat(INSEPGLayoutMinBackgroundZ))
+            print ("=============================")
             return CGFloat(INSEPGLayoutMinBackgroundZ)
         }
         
@@ -956,12 +1001,16 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
         } else {
             for section in 0 ..< (collectionView?.numberOfSections ?? 0) {
                 let earliestDateForSection = self.earliestDate(forSection: section)
-                if (earliestDateForSection != nil && (earliestDateForSection as NSDate?)?.ins_isEarlierThan(earliestDate) != nil) || earliestDate == nil {
-                    earliestDate = earliestDateForSection
+                if earliestDateForSection != nil {
+                    if earliestDate == nil {
+                        earliestDate = earliestDateForSection
+                    } else if (earliestDateForSection as NSDate?)?.ins_isEarlierThan(earliestDate) != false {
+                        earliestDate = earliestDateForSection
+                    }
                 }
             }
         }
-        
+        //2020-05-13 11:08:18 +0000
         if earliestDate != nil {
             cachedEarliestDate = earliestDate
             return cachedEarliestDate
@@ -969,6 +1018,11 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
         
         return Date()
     }
+    
+    /*
+     (lldb) po [self earliestDate].timeIntervalSince1970
+     1589357049.1734829
+     */
     
     func earliestDate(forSection section: Int) -> Date? {
         if cachedEarliestDates?[NSNumber(value: section)] != nil {
@@ -983,8 +1037,12 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
             for item in 0..<(collectionView?.numberOfItems(inSection: section) ?? 0) {
                 let indexPath = IndexPath(item: item, section: section)
                 let itemStartDate = startDate(for: indexPath)
-                if (itemStartDate != nil && (itemStartDate as NSDate?)?.ins_isEarlierThan(earliestDate) != nil) || earliestDate == nil {
-                    earliestDate = itemStartDate
+                if itemStartDate != nil {
+                    if earliestDate == nil {
+                        earliestDate = itemStartDate
+                    } else if (itemStartDate as NSDate?)?.ins_isEarlierThan(earliestDate) != false {
+                        earliestDate = itemStartDate
+                    }
                 }
             }
         }
@@ -997,6 +1055,11 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
         return nil
     }
     
+    /*
+     (lldb) po [self latestDate].timeIntervalSince1970
+     1589622468.1734829
+     */
+    
     func latestDate() -> Date? {
         if cachedLatestDate != nil {
             return cachedLatestDate
@@ -1008,12 +1071,17 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
         } else {
             for section in 0 ..< (collectionView?.numberOfSections ?? 0) {
                 let latestDateForSection = self.latestDate(forSection: section)
-                if (latestDateForSection != nil && (latestDateForSection as NSDate?)?.ins_isLaterThan(latestDate) != nil) || latestDate == nil {
-                    latestDate = latestDateForSection
+                //2020-05-16 09:47:48 +0000
+                if latestDateForSection != nil {
+                    if latestDate == nil {
+                        latestDate = latestDateForSection
+                    } else if (latestDateForSection as NSDate?)?.ins_isLaterThan(latestDate) ?? false {
+                        latestDate = latestDateForSection
+                    }
                 }
             }
         }
-        
+        //2020-05-16 09:47:48 +0000
         if latestDate != nil {
             cachedLatestDate = latestDate
             return cachedLatestDate
@@ -1073,6 +1141,7 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
         let indexPathKey = key(for: indexPath)
         
         if let indexPathKey = indexPathKey {
+//            print (indexPathKey)
             if let date = cachedEndTimeDate.object(forKey: indexPathKey as NSIndexPath) {
                 return date as Date
             }
@@ -1101,17 +1170,23 @@ class INSElectronicProgramGuideLayout: UICollectionViewLayout {
     // Issues using NSIndexPath as key in NSMutableDictionary
     // http://stackoverflow.com/questions/19613927/issues-using-nsindexpath-as-key-in-nsmutabledictionary
     func key(for indexPath: IndexPath?) -> IndexPath? {
+//        print ("Infinite")
         if type(of: indexPath) == IndexPath.self {
             return indexPath
         }
         return IndexPath(row: indexPath?.row ?? 0, section: indexPath?.section ?? 0)
     }
     
-    // MARK: - Size Delegate Wrapper
     func floatingItemOverlaySize(for indexPath: IndexPath?) -> CGSize {
         let indexPathKey = key(for: indexPath)
         if let indexPathKey = indexPathKey {
-            return (cachedFloatingItemsOverlaySize?[indexPathKey] as? AnyObject)?.cgSizeValue ?? .zero
+            if let obj = cachedFloatingItemsOverlaySize?[indexPathKey] as? AnyObject {
+                if !(obj is NSNull) {
+//                    print (obj)
+//                    print (obj.cgSizeValue ?? .zero)
+                    return obj.cgSizeValue ?? .zero
+                }
+            }
         }
         var floatingItemSize = floatingItemOverlaySize
         if delegate?.responds(to: #selector(INSElectronicProgramGuideLayoutDelegate.collectionView(_:layout:sizeForFloatingItemOverlayAt:))) ?? false {

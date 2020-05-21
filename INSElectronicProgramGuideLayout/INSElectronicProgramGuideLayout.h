@@ -152,24 +152,4 @@
 //
 //@end
 //
-//@protocol INSElectronicProgramGuideLayoutDataSource <UICollectionViewDataSource>
-//@required
-//- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout startTimeForItemAtIndexPath:(NSIndexPath *)indexPath;
-//
-//- (NSDate *)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout endTimeForItemAtIndexPath:(NSIndexPath *)indexPath;
-//
-//- (NSDate *)currentTimeForCollectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)collectionViewLayout;
-//
-//@optional
-///**
-// *  By Default start and end date is calculated using collectionView:layout:startTimeForItemAtIndexPath: and collectionView:layout:endTimeForItemAtIndexPath:,
-// *  if you want to force layout timeline use these delegate methods.
-// */
-//- (NSDate *)collectionView:(UICollectionView *)collectionView startTimeForLayout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout;
-//- (NSDate *)collectionView:(UICollectionView *)collectionView endTimeForlayout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout;
-//@end
-//
-//@protocol INSElectronicProgramGuideLayoutDelegate <UICollectionViewDelegate>
-//@optional
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(INSElectronicProgramGuideLayout *)electronicProgramGuideLayout sizeForFloatingItemOverlayAtIndexPath:(NSIndexPath *)indexPath;
-//@end
+
